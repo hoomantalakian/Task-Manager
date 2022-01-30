@@ -3,7 +3,19 @@ import AddBoxIcon from "@mui/icons-material/AddBox";
 import { Fragment, useState } from "react";
 import { Box } from "@mui/system";
 //
+const boxStyle = {
+	position: "absolute",
+	top: "50%",
+	left: "50%",
+	transform: "translate(-50%, -50%)",
+	width: 350,
+	bgcolor: "#f1f6fe",
+	padding: 4,
+	textAlign: "center",
+	borderRadius: 2,
+};
 
+//
 function NewTask() {
 	const [isOpen, setIsOpen] = useState(false);
 	function openHandler() {
@@ -26,21 +38,9 @@ function NewTask() {
 				Add New Task
 			</Button>
 			<Modal open={isOpen} onClose={closeHandler}>
-				<Box
-					sx={{
-						position: "absolute",
-						top: "50%",
-						left: "50%",
-						transform: "translate(-52%, -50%)",
-						width: 350,
-						bgcolor: "#f1f6fe",
-						padding: 4,
-						textAlign: "center",
-						borderRadius: 2,
-					}}
-					maxWidth="xs"
-				>
-					<Typography>NewTaskModal test!</Typography>
+				<Box sx={boxStyle} maxWidth="xs">
+					{/* <Typography>NewTaskModal test!</Typography> */}
+					
 				</Box>
 			</Modal>
 		</Fragment>
