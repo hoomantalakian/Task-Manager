@@ -5,34 +5,37 @@ import MainContainer from "./components/MainContainer";
 import UserHeader from "./components/UserHeader";
 import NewTask from "./components/NewTask";
 import Tasks from "./components/Tasks";
+import { useEffect, useState } from "react";
+import axios from "axios";
 //
 
-const DummyData = [
-	{
-		id: "t1",
-		title: "buy fruit",
-		description:
-			"banana, apple, potato, grapes, lemons, orangesand, watermelon, peach, pineapple and ...",
-	},
-	{
-		id: "t2",
-		title: "pharmacy",
-		description: "codein, adult cold, novafen",
-	},
-	{
-		id: "t3",
-		title: "home",
-		description: "working piano with mom",
-	}
-];
-
 function App() {
+	const [tasksData, setTasksData] = useState([]);
+	const [reloadToggle, setReloadToggle] = useState(false);
+
+	function reloadHandler() {
+		setReloadToggle((prev) => !prev);
+	}
+
+	useEffect(() => {
+		axios
+			.get("http://localhost:5000/api/tasks")
+			.then((res) => {
+				setTasksData(res.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	}, [reloadToggle]);
+
+	// console.log(tasksData);
+
 	return (
 		<main className="app">
-			<MainContainer >
+			<MainContainer>
 				<UserHeader />
-				<NewTask />
-				<Tasks DummyData={DummyData} />
+				<NewTask reloadHandler={reloadHandler} />
+				<Tasks tasksData={tasksData} reloadHandler={reloadHandler} />
 			</MainContainer>
 		</main>
 	);

@@ -4,7 +4,7 @@ import axios from "axios";
 import { Button, Modal, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import AddBoxIcon from "@mui/icons-material/AddBox";
-import DoneIcon from '@mui/icons-material/Done';
+import DoneIcon from "@mui/icons-material/Done";
 //------------------------------------------------
 const boxStyle = {
 	position: "absolute",
@@ -19,26 +19,27 @@ const boxStyle = {
 	borderRadius: 2,
 };
 
-function NewTask() {
+function NewTask(props) {
 	const [isOpen, setIsOpen] = useState(false);
+
 	function openHandler() {
 		setIsOpen(true);
 	}
 	function closeHandler() {
 		setIsOpen(false);
 	}
-	
+
 	const title = useRef();
 	const description = useRef();
 
 	async function addTaskHandler() {
-		const response = await axios.post("http://localhost:5000/api/tasks", {
+		await axios.post("http://localhost:5000/api/tasks", {
 			title: title.current.value,
 			description: description.current.value,
-			creator: "61f40bba7e181a6db2369f2c",
+			creator: "61f40baf7e181a6db2369f29",
 		});
-		console.log(response.data);
 		setIsOpen(false);
+		props.reloadHandler();
 	}
 
 	return (
@@ -54,7 +55,7 @@ function NewTask() {
 				Add New Task
 			</Button>
 			<Modal open={isOpen} onClose={closeHandler}>
-				<Box sx={boxStyle} maxWidth="xs" >
+				<Box sx={boxStyle} maxWidth="xs">
 					<TextField
 						inputRef={title}
 						id="title"
