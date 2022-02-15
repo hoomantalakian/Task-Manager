@@ -1,4 +1,5 @@
 const express = require("express");
+const bcrypt = require("bcryptjs");
 //
 const User = require("../models/user-model");
 //----------------------------------------
@@ -19,9 +20,17 @@ async function signUp(req, res) {
 		);
 		return;
 	}
+	//
+	let hashedPassword;
+	try {
+		hashedPassword = await bcrypt.hash(password, 12);
+	} catch (err) {
+		res.json("Something went wrong: ", err);
+	}
+
 	const createdUser = new User({
 		username,
-		password,
+		password: hashedPassword,
 		// insert some dummy data (in task) for user demo
 		tasks: [],
 	});
@@ -36,7 +45,7 @@ async function signUp(req, res) {
 	res.status(200).json("Welcome!");
 }
 //
-async function login(req, res) { 
+async function login(req, res) {
 	const { username, password } = req.body;
 	let existingUser;
 	try {
