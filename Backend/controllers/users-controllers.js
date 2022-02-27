@@ -1,5 +1,6 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 //
 const User = require("../models/user-model");
 //----------------------------------------
@@ -42,7 +43,18 @@ async function signUp(req, res) {
 		res.json("Something went wrong: ", err);
 	}
 
-	res.status(200).json("Welcome!");
+	let token;
+	try {
+		token = jwt.sign({ userId: createdUser.id }, "seCreT-KeY-12");
+	} catch (err) {
+		res.json("Something went wrong: ", err);
+	}
+
+	res.status(200).json({
+		username: createdUser.username,
+		userId: createdUser.id,
+		token: token,
+	});
 }
 //
 async function login(req, res) {
@@ -54,12 +66,25 @@ async function login(req, res) {
 		res.json("Something went wrong: ", err);
 	}
 
-	if (!existingUser || existingUser.password != password) {
+	let isPasswordValid = await bcrypt.compare(password, existingUser.password);
+
+	if (!existingUser || !isPasswordValid) {
 		res.status(401).send(`Username or Password is wrong! try again`);
 		return;
 	}
 
-	res.status(200).send("you are logged in!");
+	let token;
+	try {
+		token = jwt.sign({ userId: existingUser.id }, "seCreT-KeY-12");
+	} catch (err) {
+		res.json("Something went wrong: ", err);
+	}
+
+	res.status(200).send({
+		username: existingUser.username,
+		userId: existingUser.id,
+		token: token,
+	});
 }
 //
 async function readAllUsers(req, res) {
