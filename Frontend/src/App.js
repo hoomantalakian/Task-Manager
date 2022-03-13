@@ -1,17 +1,20 @@
-// import { Container } from "@mui/material";
 import "./app.css";
+import axios from "axios";
+import { useEffect, useState, useContext, Fragment } from "react";
 //
+import AuthPage from "./components/AuthPage";
 import MainContainer from "./components/MainContainer";
 import UserHeader from "./components/UserHeader";
 import NewTask from "./components/NewTask";
 import Tasks from "./components/Tasks";
-import { useEffect, useState } from "react";
-import axios from "axios";
-//
+import AuthContext from "./context/auth-context";
+//---------------------------------------
 
 function App() {
 	const [tasksData, setTasksData] = useState([]);
 	const [reloadToggle, setReloadToggle] = useState(false);
+
+	const ctxData = useContext(AuthContext);
 
 	function reloadHandler() {
 		setReloadToggle((prev) => !prev);
@@ -28,15 +31,21 @@ function App() {
 			});
 	}, [reloadToggle]);
 
-	// console.log(tasksData);
-
 	return (
 		<main className="app">
-			<MainContainer>
-				<UserHeader />
-				<NewTask reloadHandler={reloadHandler} />
-				<Tasks tasksData={tasksData} reloadHandler={reloadHandler} />
-			</MainContainer>
+			{!ctxData.isLoggeIn && <AuthPage />}
+			{ctxData.isLoggeIn && (
+				<MainContainer>
+					<Fragment>
+						<UserHeader />
+						<NewTask reloadHandler={reloadHandler} />
+						<Tasks
+							tasksData={tasksData}
+							reloadHandler={reloadHandler}
+						/>
+					</Fragment>
+				</MainContainer>
+			)}
 		</main>
 	);
 }
