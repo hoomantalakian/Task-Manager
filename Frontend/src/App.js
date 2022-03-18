@@ -33,8 +33,8 @@ function App() {
 
 	return (
 		<main className="app">
-			{!ctxData.isLoggeIn && <AuthPage />}
-			{ctxData.isLoggeIn && (
+			{!ctxData.isLoggedin && <AuthPage />}
+			{ctxData.isLoggedin && (
 				<MainContainer>
 					<Fragment>
 						<UserHeader />

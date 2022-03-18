@@ -3,19 +3,19 @@ import { useState, createContext } from "react";
 const AuthContext = createContext();
 
 export function AuthContextProvider(props) {
-	const [isLoggeIn, setIsLoggeIn] = useState(false);
+	const [isLoggedin, setIsLoggedin] = useState(false);
 
 	function loginHandler() {
-		setIsLoggeIn(true);
+		setIsLoggedin(true);
 	}
 	function logoutHandler() {
-		setIsLoggeIn(false);
+		setIsLoggedin(false);
 	}
 
 	return (
 		<AuthContext.Provider
 			value={{
-				isLoggeIn: isLoggeIn,
+				isLoggedin,
 				onLogin: loginHandler,
 				onLogout: logoutHandler,
 			}}

@@ -1,8 +1,7 @@
-import React from 'react'
+import React, { useState, Fragment } from "react";
 //
-import { Button, TextField } from '@mui/material'
-import { Box } from '@mui/system'
-import DoneIcon from "@mui/icons-material/Done";
+import LoginPage from "./LoginPage";
+import SignupPage from "./SignupPage";
 //-----------------------------------------
 
 const boxStyle = {
@@ -19,41 +18,15 @@ const boxStyle = {
 };
 
 function AuthPage() {
-  return (
-    <Box sx={boxStyle} maxWidth="xs">
-				<TextField
-					// inputRef={titleRef}
-					// value={title}
-					// onChange={titleChangeHandler}
-					id="title"
-					label="Title"
-					sx={{ mb: 2 }}
-					placeholder="Enter task title (required)"
-					fullWidth
-					required
-				/>
-				<TextField
-					// inputRef={descriptionRef}
-					// value={description}
-					// onChange={descriptionChangeHandler}
-					id="description"
-					label="Description"
-					placeholder="Describe your task (optional)"
-					multiline={true}
-					fullWidth
-				/>
-				<Button
-					// onClick={updateTaskHandler}
-					variant="outlined"
-					color="warning"
-					sx={{ mt: 2, fontSize: "medium" }}
-					fullWidth
-					startIcon={<DoneIcon />}
-				>
-					LogIn/SignUp
-				</Button>
-			</Box>
-  )
+	const [isLoginMode, setIsLoginMode] = useState(true);
+	const [isSignpMode, setIsSignpMode] = useState(false);
+
+	return (
+		<Fragment>
+			{isLoginMode && <LoginPage boxStyle={boxStyle} />}
+			{isSignpMode && <SignupPage boxStyle={boxStyle} />}
+		</Fragment>
+	);
 }
 
-export default AuthPage
+export default AuthPage;
