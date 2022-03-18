@@ -1,6 +1,6 @@
-import React from 'react'
+import React from "react";
 //
-import { Box, Button, TextField } from '@mui/material';
+import { Box, Button, Link, TextField, Typography } from "@mui/material";
 //-------------------------------------------------
 function SignupPage(props) {
 	return (
@@ -12,7 +12,7 @@ function SignupPage(props) {
 				id="username"
 				label="Username"
 				sx={{ mb: 2 }}
-				placeholder="Enter task title (required)"
+				placeholder="Choose a username"
 				fullWidth
 				required
 			/>
@@ -22,7 +22,7 @@ function SignupPage(props) {
 				// onChange={descriptionChangeHandler}
 				id="password"
 				label="Password"
-				placeholder="Describe your task (optional)"
+				placeholder="Type your password"
 				fullWidth
 				required
 			/>
@@ -35,8 +35,15 @@ function SignupPage(props) {
 			>
 				Sign up
 			</Button>
+			<Typography mt>
+				{" "}
+				for login click{" "}
+				<Link onClick={props.loginModeHandler} href="#">
+					here
+				</Link>
+			</Typography>
 		</Box>
 	);
 }
 
-export default SignupPage
+export default SignupPage;

@@ -21,10 +21,29 @@ function AuthPage() {
 	const [isLoginMode, setIsLoginMode] = useState(true);
 	const [isSignpMode, setIsSignpMode] = useState(false);
 
+	function loginModeHandler() {
+		setIsLoginMode(true);
+		setIsSignpMode(false);
+	}
+	function signpModeHandler() {
+		setIsSignpMode(true);
+		setIsLoginMode(false);
+	}
+
 	return (
 		<Fragment>
-			{isLoginMode && <LoginPage boxStyle={boxStyle} />}
-			{isSignpMode && <SignupPage boxStyle={boxStyle} />}
+			{isLoginMode && (
+				<LoginPage
+					signpModeHandler={signpModeHandler}
+					boxStyle={boxStyle}
+				/>
+			)}
+			{isSignpMode && (
+				<SignupPage
+					loginModeHandler={loginModeHandler}
+					boxStyle={boxStyle}
+				/>
+			)}
 		</Fragment>
 	);
 }
