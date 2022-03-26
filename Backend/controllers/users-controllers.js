@@ -63,13 +63,13 @@ async function login(req, res) {
 	try {
 		existingUser = await User.findOne({ username: username });
 	} catch (err) {
-		res.json("Something went wrong: ", err);
+		res.send("Something went wrong: ", err);
 	}
 
 	let isPasswordValid = await bcrypt.compare(password, existingUser.password);
 
 	if (!existingUser || !isPasswordValid) {
-		res.status(401).send(`Username or Password is wrong! try again`);
+		res.status(401).send("Username or Password is wrong! try again");
 		return;
 	}
 
@@ -85,6 +85,8 @@ async function login(req, res) {
 		userId: existingUser.id,
 		token: token,
 	});
+
+
 }
 //
 async function readAllUsers(req, res) {

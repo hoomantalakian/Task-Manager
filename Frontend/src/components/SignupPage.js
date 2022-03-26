@@ -1,12 +1,31 @@
-import React from "react";
+import React, { useRef } from "react";
+import Axios from "axios";
+
 //
 import { Box, Button, Link, TextField, Typography } from "@mui/material";
 //-------------------------------------------------
 function SignupPage(props) {
+
+	const username = useRef("");
+	const password = useRef("");
+
+	function signupHandler() {
+		Axios.post("http://localhost:5000/api/users/signup", {
+			username: username.current.value,
+			password: password.current.value,
+		})
+			.then((res) => {
+				console.log(res.data);
+			})
+			.catch((err) => {
+				console.error("Somethinhg went wrong!", err);
+			});
+	}
+
 	return (
 		<Box sx={props.boxStyle} maxWidth="xs">
 			<TextField
-				// inputRef={titleRef}
+				inputRef={username}
 				// value={title}
 				// onChange={titleChangeHandler}
 				id="username"
@@ -17,7 +36,7 @@ function SignupPage(props) {
 				required
 			/>
 			<TextField
-				// inputRef={descriptionRef}
+				inputRef={password}
 				// value={description}
 				// onChange={descriptionChangeHandler}
 				id="password"
@@ -27,7 +46,7 @@ function SignupPage(props) {
 				required
 			/>
 			<Button
-				// onClick={updateTaskHandler}
+				onClick={signupHandler}
 				variant="outlined"
 				color="warning"
 				sx={{ mt: 2, fontSize: "medium" }}
@@ -37,9 +56,9 @@ function SignupPage(props) {
 			</Button>
 			<Typography mt>
 				{" "}
-				for login click{" "}
+				Do you have an account? {" "}
 				<Link onClick={props.loginModeHandler} href="#">
-					here
+					Click here
 				</Link>
 			</Typography>
 		</Box>

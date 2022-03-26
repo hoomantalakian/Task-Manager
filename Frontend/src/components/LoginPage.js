@@ -1,12 +1,14 @@
-import React, { useRef } from "react";
+import React, { useContext, useRef } from "react";
 import Axios from "axios";
 //
+import AuthContext from "../context/auth-context";
 import { Box, Button, Link, TextField, Typography } from "@mui/material";
 //-----------------------------------------------------------
 function LoginPage(props) {
-	const username = useRef();
-	const password = useRef();
-	// const password = useRef();
+	const username = useRef("");
+	const password = useRef("");
+
+	const ctxData = useContext(AuthContext);
 
 	function loginHandler() {
 		Axios.post("http://localhost:5000/api/users/login", {
@@ -14,6 +16,7 @@ function LoginPage(props) {
 			password: password.current.value,
 		})
 			.then((res) => {
+				ctxData.onLogin();
 				console.log(res.data);
 			})
 			.catch((err) => {
@@ -53,7 +56,7 @@ function LoginPage(props) {
 				LogIn
 			</Button>
 			<Typography mt>
-				create new account{" "}
+				Create new account{" "}
 				<Link onClick={props.signpModeHandler} href="#">
 					here
 				</Link>

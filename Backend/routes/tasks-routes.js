@@ -10,8 +10,6 @@ const {
 //----------------------------------------
 const router = express.Router();
 
- 
-
 router.get("/", readAllTasks);
 router.get("/:tid", readOneTask);
 router.post("/", createTask);
