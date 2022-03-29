@@ -56,7 +56,7 @@ function SignupPage(props) {
 			</Button>
 			<Typography mt>
 				{" "}
-				Do you have an account? {" "}
+				Have an account already? {" "}
 				<Link onClick={props.loginModeHandler} href="#">
 					Click here
 				</Link>

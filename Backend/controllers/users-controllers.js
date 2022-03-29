@@ -45,7 +45,10 @@ async function signUp(req, res) {
 
 	let token;
 	try {
-		token = jwt.sign({ userId: createdUser.id }, "seCreT-KeY-12");
+		token = jwt.sign(
+			{ userId: createdUser.id, username: createdUser.username },
+			"seCreT-KeY-12"
+		);
 	} catch (err) {
 		res.json("Something went wrong: ", err);
 	}
@@ -75,7 +78,10 @@ async function login(req, res) {
 
 	let token;
 	try {
-		token = jwt.sign({ userId: existingUser.id }, "seCreT-KeY-12");
+		token = jwt.sign(
+			{ userId: existingUser.id, username: existingUser.username },
+			"seCreT-KeY-12"
+		);
 	} catch (err) {
 		res.json("Something went wrong: ", err);
 	}
@@ -85,8 +91,6 @@ async function login(req, res) {
 		userId: existingUser.id,
 		token: token,
 	});
-
-
 }
 //
 async function readAllUsers(req, res) {

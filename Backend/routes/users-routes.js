@@ -1,5 +1,7 @@
 const express = require("express");
 //
+const authCheck = require("../middleware/auth-ckeck");
+//----------------------------
 const {
 	login,
 	signUp,
@@ -7,6 +9,8 @@ const {
 } = require("../controllers/users-controllers");
 //----------------------------------------
 const router = express.Router();
+
+router.use(authCheck);
 
 router.post("/signup", signUp);
 router.post("/login", login);
