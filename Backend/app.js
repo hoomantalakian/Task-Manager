@@ -1,13 +1,16 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const corsErrorHandler = require("./utility/corsErrorHandler");
+// const cors = require("cors");
 //
 const usersRoutes = require("./routes/users-routes");
 const tasksRoutes = require("./routes/tasks-routes");
 //-------------------------------------------
-const app = express(); 
+const app = express();
 app.use(express.json());
 app.use(corsErrorHandler);
+// app.use(cors());
+
 // Routes
 app.use("/api/users", usersRoutes);
 app.use("/api/tasks", tasksRoutes);
@@ -19,7 +22,7 @@ mongoose
 	)
 	.then(() => {
 		console.log("Database is Connected");
-	}) 
+	})
 	.catch((err) => {
 		console.log("Database connection Failed:", err);
 	});

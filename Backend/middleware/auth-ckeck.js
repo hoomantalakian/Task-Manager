@@ -2,6 +2,9 @@ const jwt = require("jsonwebtoken");
 // -----------------------------
 
 function authCkeck(req, res, next) {
+	// if (req.method === "OPTIONS") {
+	// 	return next();
+	// }
 	try {
 		const token = req.headers.authorization.split(" ")[1];
 		if (!token) {
@@ -11,11 +14,12 @@ function authCkeck(req, res, next) {
 		req.userData = {
 			username: decodedToken.username,
 			userId: decodedToken.userId,
-			// token: token,
 		};
+		// clg
+		console.log("auth check done!");
 		next();
 	} catch (err) {
-		res.send("Something went wrong", err);
+		res.status(401).send(err);
 	}
 }
 

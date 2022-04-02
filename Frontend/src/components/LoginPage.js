@@ -11,12 +11,20 @@ function LoginPage(props) {
 	const ctxData = useContext(AuthContext);
 
 	function loginHandler() {
-		Axios.post("http://localhost:5000/api/users/login", {
-			username: username.current.value,
-			password: password.current.value,
-		})
+		Axios.post(
+			"http://localhost:5000/api/users/login",
+			{
+				username: username.current.value,
+				password: password.current.value,
+			},
+			{
+				headers: {
+					Authorization: `Bearer ${ctxData.token}`,
+				},
+			}
+		)
 			.then((res) => {
-				ctxData.onLogin();
+				ctxData.onLogin(ctxData.token);
 				console.log(res.data);
 			})
 			.catch((err) => {
