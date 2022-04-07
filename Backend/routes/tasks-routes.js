@@ -7,12 +7,12 @@ const {
 	updateTask,
 	deleteTask,
 } = require("../controllers/tasks-controllers");
-const authCheck = require("../middleware/auth-ckeck");
+// const authCheck = require("../middleware/auth-ckeck");
 //----------------------------------------
 
 const router = express.Router();
 
-router.use(authCheck);
+// router.use(authCheck);
 
 router.get("/", readAllTasks);
 router.get("/:tid", readOneTask);

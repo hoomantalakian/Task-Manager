@@ -7,11 +7,12 @@ export function AuthContextProvider(props) {
 
 	function loginHandler(token) {
 		setToken(token);
+		localStorage.setItem("userData", JSON.stringify({ token }));
 	}
 	function logoutHandler() {
 		setToken(null);
 	}
- 
+
 	return (
 		<AuthContext.Provider
 			value={{

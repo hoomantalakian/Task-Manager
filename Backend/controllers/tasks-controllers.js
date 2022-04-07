@@ -11,7 +11,7 @@ async function readAllTasks(req, res) {
 		const tasks = await Task.find();
 		res.json(tasks);
 	} catch (err) {
-		res.json("Something went wrong: ", err);
+		res.json("Something went wrong (readAllTasks): ", err);
 	}
 }
 //
@@ -21,7 +21,7 @@ async function readOneTask(req, res) {
 	try {
 		task = await Task.findById(taskID);
 	} catch (err) {
-		res.json("Something went wrong: ", err);
+		res.json("Something went wrong (readOneTask): ", err);
 	}
 	res.status(200).json(task);
 }
@@ -38,7 +38,7 @@ async function createTask(req, res) {
 	try {
 		user = await User.findById(creator);
 	} catch (err) {
-		res.json("Something went wrong: ", err);
+		res.json("Something went wrong (find user): ", err);
 	}
 
 	try {
@@ -49,7 +49,7 @@ async function createTask(req, res) {
 		await user.save({ session: sess });
 		await sess.commitTransaction();
 	} catch (err) {
-		res.json("Something went wrong: ", err);
+		res.json("Something went wrong (createTask session): ", err);
 	}
 
 	res.status(200).json(createdTask);
@@ -62,7 +62,7 @@ async function updateTask(req, res) {
 	try {
 		task = await Task.findById(taskID);
 	} catch (err) {
-		res.json("Something went wrong: ", err);
+		res.json("Something went wrong (find task): ", err);
 	}
 
 	task.title = title;
@@ -70,7 +70,7 @@ async function updateTask(req, res) {
 	try {
 		await task.save();
 	} catch (err) {
-		res.json("Something went wrong: ", err);
+		res.json("Something went wrong (save task): ", err);
 	}
 	res.status(200).json(task);
 }
@@ -81,7 +81,7 @@ async function deleteTask(req, res) {
 	try {
 		task = await Task.findById(taskID).populate("creator");
 	} catch (err) {
-		res.json("Something went wrong: ", err);
+		res.json("Something went wrong (find task2): ", err);
 	}
 
 	try {
@@ -92,7 +92,7 @@ async function deleteTask(req, res) {
 		await task.creator.save({ session: sess });
 		await sess.commitTransaction();
 	} catch (err) {
-		res.json("Something went wrong: ", err);
+		res.json("Something went wrong (deleteTask session): ", err);
 	}
 
 	res.status(200).json("task deleted!");

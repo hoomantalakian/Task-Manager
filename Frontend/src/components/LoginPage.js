@@ -11,6 +11,10 @@ function LoginPage(props) {
 	const ctxData = useContext(AuthContext);
 
 	function loginHandler() {
+		const { token: accessToken } = JSON.parse(
+			localStorage.getItem("userData")
+		);
+		console.log(accessToken);
 		Axios.post(
 			"http://localhost:5000/api/users/login",
 			{
@@ -19,16 +23,17 @@ function LoginPage(props) {
 			},
 			{
 				headers: {
-					Authorization: `Bearer ${ctxData.token}`,
+					Authorization: `Bearer ${accessToken}`,
 				},
 			}
 		)
 			.then((res) => {
-				ctxData.onLogin(ctxData.token);
+				const token = res.data.token;
+				ctxData.onLogin(token);
 				console.log(res.data);
 			})
 			.catch((err) => {
-				console.error("Somethinhg went wrong!", err);
+				console.error("Somethinhg went wrong (loginHandler)", err);
 			});
 	}
 	return (

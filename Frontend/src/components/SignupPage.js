@@ -18,7 +18,7 @@ function SignupPage(props) {
 				console.log(res.data);
 			})
 			.catch((err) => {
-				console.error("Somethinhg went wrong!", err);
+				console.error("Somethinhg went wrong (signupHandler):", err);
 			});
 	}
 

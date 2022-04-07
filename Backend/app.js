@@ -1,15 +1,15 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const corsErrorHandler = require("./utility/corsErrorHandler");
-// const cors = require("cors");
+const cors = require("cors");
 //
 const usersRoutes = require("./routes/users-routes");
 const tasksRoutes = require("./routes/tasks-routes");
 //-------------------------------------------
 const app = express();
 app.use(express.json());
-app.use(corsErrorHandler);
-// app.use(cors());
+// app.use(corsErrorHandler);
+app.use(cors());
 
 // Routes
 app.use("/api/users", usersRoutes);

@@ -12,7 +12,7 @@ async function signUp(req, res) {
 	try {
 		creatingUser = await User.findOne({ username: username });
 	} catch (err) {
-		res.json("Something went wrong: ", err);
+		res.json("Something went wrong (creatingUser): ", err);
 	}
 
 	if (creatingUser) {
@@ -26,7 +26,7 @@ async function signUp(req, res) {
 	try {
 		hashedPassword = await bcrypt.hash(password, 12);
 	} catch (err) {
-		res.json("Something went wrong: ", err);
+		res.json("Something went wrong (hashedPassword): ", err);
 	}
 
 	const createdUser = new User({
@@ -40,7 +40,7 @@ async function signUp(req, res) {
 	try {
 		result = await createdUser.save();
 	} catch (err) {
-		res.json("Something went wrong: ", err);
+		res.json("Something went wrong (result): ", err);
 	}
 
 	let token;
@@ -50,7 +50,7 @@ async function signUp(req, res) {
 			"seCreT-KeY-12"
 		);
 	} catch (err) {
-		res.json("Something went wrong: ", err);
+		res.json("Something went wrong (signUp token): ", err);
 	}
 
 	res.status(200).json({
@@ -66,7 +66,7 @@ async function login(req, res) {
 	try {
 		existingUser = await User.findOne({ username: username });
 	} catch (err) {
-		res.send("Something went wrong: ", err);
+		res.send("Something went wrong (existingUser): ", err);
 	}
 
 	let isPasswordValid = await bcrypt.compare(password, existingUser.password);
@@ -83,7 +83,7 @@ async function login(req, res) {
 			"seCreT-KeY-12"
 		);
 	} catch (err) {
-		res.json("Something went wrong: ", err);
+		res.json("Something went wrong (login token): ", err);
 	}
 
 	res.status(200).send({
