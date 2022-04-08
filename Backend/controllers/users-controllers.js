@@ -5,14 +5,15 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user-model");
 //----------------------------------------
 const router = express.Router();
-// 
+//
 async function signUp(req, res) {
+	console.log("sent to back");
 	const { username, password } = req.body;
 	let creatingUser;
 	try {
 		creatingUser = await User.findOne({ username: username });
 	} catch (err) {
-		res.json("Something went wrong (creatingUser): ", err);
+		res.send("Something went wrong (creatingUser): ", err);
 	}
 
 	if (creatingUser) {
@@ -26,7 +27,7 @@ async function signUp(req, res) {
 	try {
 		hashedPassword = await bcrypt.hash(password, 12);
 	} catch (err) {
-		res.json("Something went wrong (hashedPassword): ", err);
+		res.send("Something went wrong (hashedPassword): ", err);
 	}
 
 	const createdUser = new User({
@@ -40,7 +41,7 @@ async function signUp(req, res) {
 	try {
 		result = await createdUser.save();
 	} catch (err) {
-		res.json("Something went wrong (result): ", err);
+		res.send("Something went wrong (result): ", err);
 	}
 
 	let token;
@@ -50,7 +51,7 @@ async function signUp(req, res) {
 			"seCreT-KeY-12"
 		);
 	} catch (err) {
-		res.json("Something went wrong (signUp token): ", err);
+		res.send("Something went wrong (signUp token): ", err);
 	}
 
 	res.status(200).json({
@@ -83,7 +84,7 @@ async function login(req, res) {
 			"seCreT-KeY-12"
 		);
 	} catch (err) {
-		res.json("Something went wrong (login token): ", err);
+		res.send("Something went wrong (login token): ", err);
 	}
 
 	res.status(200).send({
@@ -98,7 +99,7 @@ async function readAllUsers(req, res) {
 	try {
 		users = await User.find({}, "username -_id");
 	} catch (err) {
-		res.json("Something went wrong: ", err);
+		res.send("Something went wrong: ", err);
 	}
 
 	res.status(200).json(users);

@@ -1,24 +1,30 @@
-import React, { useRef } from "react";
+import React, { useRef, useContext } from "react";
 import Axios from "axios";
 
 //
 import { Box, Button, Link, TextField, Typography } from "@mui/material";
+import AuthContext from "../context/auth-context";
 //-------------------------------------------------
 function SignupPage(props) {
-
 	const username = useRef("");
 	const password = useRef("");
 
+	const ctxData = useContext(AuthContext)
+
 	function signupHandler() {
+		// console.log("front");
 		Axios.post("http://localhost:5000/api/users/signup", {
 			username: username.current.value,
 			password: password.current.value,
 		})
 			.then((res) => {
 				console.log(res.data);
+				const token = res.data.token;
+				ctxData.onLogin(token);
 			})
 			.catch((err) => {
 				console.error("Somethinhg went wrong (signupHandler):", err);
+				console.log(err.response.data)
 			});
 	}
 
@@ -26,8 +32,6 @@ function SignupPage(props) {
 		<Box sx={props.boxStyle} maxWidth="xs">
 			<TextField
 				inputRef={username}
-				// value={title}
-				// onChange={titleChangeHandler}
 				id="username"
 				label="Username"
 				sx={{ mb: 2 }}
@@ -37,8 +41,6 @@ function SignupPage(props) {
 			/>
 			<TextField
 				inputRef={password}
-				// value={description}
-				// onChange={descriptionChangeHandler}
 				id="password"
 				label="Password"
 				placeholder="Type your password"
@@ -56,7 +58,7 @@ function SignupPage(props) {
 			</Button>
 			<Typography mt>
 				{" "}
-				Have an account already? {" "}
+				Have an account already?{" "}
 				<Link onClick={props.loginModeHandler} href="#">
 					Click here
 				</Link>

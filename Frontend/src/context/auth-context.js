@@ -4,22 +4,27 @@ const AuthContext = createContext();
 
 export function AuthContextProvider(props) {
 	const [token, setToken] = useState(false);
+	const [displayName, setDisplayName] = useState("User");
 
-	function loginHandler(token) {
+	function authLoginHandler(token) {
 		setToken(token);
 		localStorage.setItem("userData", JSON.stringify({ token }));
 	}
-	function logoutHandler() {
+	function AuthLogoutHandler() {
 		setToken(null);
+		localStorage.removeItem("userData");
+		localStorage.removeItem("username");
 	}
 
 	return (
 		<AuthContext.Provider
 			value={{
 				isLoggedin: !!token,
-				token: token,
-				onLogin: loginHandler,
-				onLogout: logoutHandler,
+				token,
+				displayName,
+				setDisplayName,
+				onLogin: authLoginHandler,
+				onLogout: AuthLogoutHandler,
 			}}
 		>
 			{props.children}

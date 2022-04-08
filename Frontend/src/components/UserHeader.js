@@ -3,6 +3,7 @@ import { useContext } from "react";
 import { Typography, Box, Button } from "@mui/material";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import AuthContext from "../context/auth-context";
+import { fontWeight } from "@mui/system";
 //----------------------------------------
 
 function UserHeader() {
@@ -26,16 +27,18 @@ function UserHeader() {
 				<AccountBoxIcon color="primary" fontSize="large" />
 				<Typography
 					sx={{ ml: 0.5 }}
+					style={{fontWeight: "bold"}}
 					display="inline-block"
-					variant="body1"
+					// variant="h6"
+
 				>
-					Username
+					{ctxData.displayName}
 				</Typography>
 			</Box>
 			<Button
 				onClick={ctxData.onLogout}
 				size="large"
-				style={{ textTransform: "none", padding: 4 }}
+				style={{ textTransform: "none", padding: 4, color: "gray", textDecoration:"underline" }}
 			>
 				Log out
 			</Button>

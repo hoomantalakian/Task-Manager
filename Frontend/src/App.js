@@ -1,6 +1,6 @@
 import "./app.css";
 import axios from "axios";
-import { useEffect, useState, useContext, Fragment, } from "react";
+import { useEffect, useState, useContext, Fragment } from "react";
 //
 import AuthPage from "./components/AuthPage";
 import MainContainer from "./components/MainContainer";
@@ -19,6 +19,16 @@ function App() {
 	function reloadHandler() {
 		setReloadToggle((prev) => !prev);
 	}
+
+	useEffect(() => {
+		const StoredUsername = localStorage.getItem("username");
+		const storedData = JSON.parse(localStorage.getItem("userData"));
+
+		if (storedData && storedData.token) {
+			ctxData.setDisplayName(StoredUsername);
+			ctxData.onLogin(storedData.token);
+		}
+	}, [ctxData]);
 
 	useEffect(() => {
 		axios

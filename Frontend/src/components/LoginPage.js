@@ -11,37 +11,41 @@ function LoginPage(props) {
 	const ctxData = useContext(AuthContext);
 
 	function loginHandler() {
-		const { token: accessToken } = JSON.parse(
-			localStorage.getItem("userData")
-		);
-		console.log(accessToken);
+		// let tokenData;
+		// if (localStorage.getItem("userData")) {
+		// 	tokenData = JSON.parse(
+		// 		localStorage.getItem("userData")
+		// 	); 
+		// }
+		// console.log("accessToken: ", tokenData);
+
 		Axios.post(
 			"http://localhost:5000/api/users/login",
 			{
 				username: username.current.value,
 				password: password.current.value,
 			},
-			{
-				headers: {
-					Authorization: `Bearer ${accessToken}`,
-				},
-			}
+			// {
+			// 	headers: {
+			// 		Authorization: `Bearer ${tokenData.token}`,
+			// 	},
+			// }
 		)
 			.then((res) => {
 				const token = res.data.token;
+				// ctxData.setDisplayName(res.data.username);
+				localStorage.setItem("username", res.data.username)
 				ctxData.onLogin(token);
-				console.log(res.data);
 			})
 			.catch((err) => {
 				console.error("Somethinhg went wrong (loginHandler)", err);
+				console.log(err);
 			});
 	}
 	return (
 		<Box sx={props.boxStyle} maxWidth="xs">
 			<TextField
 				inputRef={username}
-				// value={username}
-				// onChange={titleChangeHandler}
 				id="username"
 				label="Username"
 				sx={{ mb: 2 }}
@@ -51,8 +55,6 @@ function LoginPage(props) {
 			/>
 			<TextField
 				inputRef={password}
-				// value={description}
-				// onChange={descriptionChangeHandler}
 				id="password"
 				label="Password"
 				placeholder="Enter your password"

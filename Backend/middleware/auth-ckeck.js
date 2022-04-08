@@ -2,13 +2,13 @@ const jwt = require("jsonwebtoken");
 // -----------------------------
 
 function authCkeck(req, res, next) {
-	if (req.method === "OPTIONS") {
-		return next();
-	}
+	// if (req.method === "OPTIONS") {
+	// 	return next();
+	// }
 	try {
 		const token = req.headers.authorization.split(" ")[1];
 		if (!token) {
-			throw new Error("Authentication failed! (authCkeck.js)");
+			throw new Error("Authentication failed! (authCkeck !token)");
 		}
 		const decodedToken = jwt.verify(token, "seCreT-KeY-12");
 		req.userData = {
@@ -20,6 +20,7 @@ function authCkeck(req, res, next) {
 		next();
 	} catch (err) {
 		res.status(401).send(err);
+		console.log("(authCkeck catch)");
 	}
 }
 
