@@ -3,7 +3,6 @@ import { useContext } from "react";
 import { Typography, Box, Button } from "@mui/material";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import AuthContext from "../context/auth-context";
-import { fontWeight } from "@mui/system";
 //----------------------------------------
 
 function UserHeader() {
@@ -29,10 +28,8 @@ function UserHeader() {
 					sx={{ ml: 0.5 }}
 					style={{fontWeight: "bold"}}
 					display="inline-block"
-					// variant="h6"
-
 				>
-					{ctxData.displayName}
+					{ctxData.username}
 				</Typography>
 			</Box>
 			<Button

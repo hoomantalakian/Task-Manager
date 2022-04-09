@@ -11,31 +11,15 @@ function LoginPage(props) {
 	const ctxData = useContext(AuthContext);
 
 	function loginHandler() {
-		// let tokenData;
-		// if (localStorage.getItem("userData")) {
-		// 	tokenData = JSON.parse(
-		// 		localStorage.getItem("userData")
-		// 	); 
-		// }
-		// console.log("accessToken: ", tokenData);
-
-		Axios.post(
-			"http://localhost:5000/api/users/login",
-			{
-				username: username.current.value,
-				password: password.current.value,
-			},
-			// {
-			// 	headers: {
-			// 		Authorization: `Bearer ${tokenData.token}`,
-			// 	},
-			// }
-		)
+		Axios.post("http://localhost:5000/api/users/login", {
+			username: username.current.value,
+			password: password.current.value,
+		})
 			.then((res) => {
 				const token = res.data.token;
-				// ctxData.setDisplayName(res.data.username);
-				localStorage.setItem("username", res.data.username)
-				ctxData.onLogin(token);
+				const userId = res.data.userId;
+				const username = res.data.username;
+				ctxData.onLogin(token, userId, username);
 			})
 			.catch((err) => {
 				console.error("Somethinhg went wrong (loginHandler)", err);

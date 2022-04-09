@@ -15,7 +15,6 @@ function authCkeck(req, res, next) {
 			username: decodedToken.username,
 			userId: decodedToken.userId,
 		};
-		// clg
 		console.log("auth check done!");
 		next();
 	} catch (err) {

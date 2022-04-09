@@ -31,10 +31,10 @@ function EditModal(props) {
 		setDescription(props.description);
 	}, [props.description, props.title]);
 	//
-	function titleChangeHandler(params) {
+	function titleChangeHandler() {
 		setTitle(titleRef.current.value);
 	}
-	function descriptionChangeHandler(params) {
+	function descriptionChangeHandler() {
 		setDescription(descriptionRef.current.value);
 	}
 	// update task

@@ -14,7 +14,7 @@ const router = express.Router();
 
 // router.use(authCheck);
 
-router.get("/", readAllTasks);
+router.get("/:uid", readAllTasks);
 router.get("/:tid", readOneTask);
 router.post("/", createTask);
 router.patch("/:tid", updateTask);

@@ -8,6 +8,7 @@ import UserHeader from "./components/UserHeader";
 import NewTask from "./components/NewTask";
 import Tasks from "./components/Tasks";
 import AuthContext from "./context/auth-context";
+// import { CircularProgress } from "@mui/material";
 //---------------------------------------
 
 function App() {
@@ -21,25 +22,26 @@ function App() {
 	}
 
 	useEffect(() => {
-		const StoredUsername = localStorage.getItem("username");
 		const storedData = JSON.parse(localStorage.getItem("userData"));
-
 		if (storedData && storedData.token) {
-			ctxData.setDisplayName(StoredUsername);
-			ctxData.onLogin(storedData.token);
+			ctxData.onLogin(
+				storedData.token,
+				storedData.userId,
+				storedData.username
+			);
 		}
 	}, [ctxData]);
 
 	useEffect(() => {
 		axios
-			.get("http://localhost:5000/api/tasks")
+			.get(`http://localhost:5000/api/tasks/${ctxData.userId}`)
 			.then((res) => {
 				setTasksData(res.data);
 			})
 			.catch((err) => {
 				console.log(err);
 			});
-	}, [reloadToggle]);
+	}, [ctxData.userId, reloadToggle]);
 
 	return (
 		<main className="app">
@@ -53,6 +55,16 @@ function App() {
 							tasksData={tasksData}
 							reloadHandler={reloadHandler}
 						/>
+						{/* {isLoading && (
+							<CircularProgress
+								style={{
+									position: "absolute",
+									left: "47%",
+									top: "35%",
+								}}
+								color="primary"
+							/>
+						)} */}
 					</Fragment>
 				</MainContainer>
 			)}

@@ -8,14 +8,14 @@ const router = express.Router();
 //
 async function readAllTasks(req, res) {
 	try {
-		const tasks = await Task.find();
+		const tasks = await Task.find({ creator: req.params.uid });
 		res.send(tasks);
 	} catch (err) {
 		res.send("Something went wrong (readAllTasks): ", err);
 	}
 }
 //
-async function readOneTask(req, res) {
+async function readOneTask(req, res) { 
 	const taskID = req.params.tid;
 	let task;
 	try {
@@ -27,6 +27,7 @@ async function readOneTask(req, res) {
 }
 //
 async function createTask(req, res) {
+	console.log("createTask");
 	const { title, description, creator } = req.body;
 	const createdTask = new Task({
 		title,

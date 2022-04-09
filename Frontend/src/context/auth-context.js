@@ -4,11 +4,17 @@ const AuthContext = createContext();
 
 export function AuthContextProvider(props) {
 	const [token, setToken] = useState(false);
-	const [displayName, setDisplayName] = useState("User");
+	const [userId, setUserId] = useState("");
+	const [username, setUsername] = useState("");
 
-	function authLoginHandler(token) {
+	function authLoginHandler(token, userId, username) {
 		setToken(token);
-		localStorage.setItem("userData", JSON.stringify({ token }));
+		setUserId(userId);
+		setUsername(username);
+		localStorage.setItem(
+			"userData",
+			JSON.stringify({ token, userId, username })
+		);
 	}
 	function AuthLogoutHandler() {
 		setToken(null);
@@ -21,8 +27,8 @@ export function AuthContextProvider(props) {
 			value={{
 				isLoggedin: !!token,
 				token,
-				displayName,
-				setDisplayName,
+				userId,
+				username,
 				onLogin: authLoginHandler,
 				onLogout: AuthLogoutHandler,
 			}}

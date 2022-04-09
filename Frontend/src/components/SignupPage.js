@@ -9,22 +9,22 @@ function SignupPage(props) {
 	const username = useRef("");
 	const password = useRef("");
 
-	const ctxData = useContext(AuthContext)
+	const ctxData = useContext(AuthContext);
 
 	function signupHandler() {
-		// console.log("front");
 		Axios.post("http://localhost:5000/api/users/signup", {
 			username: username.current.value,
 			password: password.current.value,
 		})
 			.then((res) => {
-				console.log(res.data);
 				const token = res.data.token;
-				ctxData.onLogin(token);
+				const userId = res.data.userId;
+				const username = res.data.username;
+				ctxData.onLogin(token, userId, username);
 			})
 			.catch((err) => {
 				console.error("Somethinhg went wrong (signupHandler):", err);
-				console.log(err.response.data)
+				console.log(err.response.data);
 			});
 	}
 

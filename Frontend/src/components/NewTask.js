@@ -1,11 +1,12 @@
-import { Fragment, useRef, useState } from "react";
+import { Fragment, useContext, useRef, useState } from "react";
 import axios from "axios";
 // MUI
 import { Button, Modal, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import DoneIcon from "@mui/icons-material/Done";
-//------------------------------------------------
+import AuthContext from "../context/auth-context";
+////------------------------------------------------
 const boxStyle = {
 	position: "absolute",
 	top: "50%",
@@ -20,7 +21,9 @@ const boxStyle = {
 };
 
 function NewTask(props) {
+	
 	const [isOpen, setIsOpen] = useState(false);
+	const ctxData = useContext(AuthContext);
 
 	function openHandler() {
 		setIsOpen(true);
@@ -33,11 +36,15 @@ function NewTask(props) {
 	const description = useRef();
 
 	async function addTaskHandler() {
-		await axios.post("http://localhost:5000/api/tasks", {
-			title: title.current.value,
-			description: description.current.value,
-			creator: "61f40baf7e181a6db2369f29",
-		});
+		await axios
+			.post("http://localhost:5000/api/tasks", {
+				title: title.current.value,
+				description: description.current.value,
+				creator: ctxData.userId,
+			})
+			.then((res) => {
+				console.log(res.data.creator);
+			});
 		setIsOpen(false);
 		props.reloadHandler();
 	}

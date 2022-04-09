@@ -78,8 +78,8 @@ function Task(props) {
 					reloadHandler={props.reloadHandler}
 					open={isModalOpen}
 					closeModalHandler={closeModalHandler}
-					title={title}
-					description={description}
+					title={props.title}
+					description={props.description}
 					id={props.id}
 				/>
 			</Box>
