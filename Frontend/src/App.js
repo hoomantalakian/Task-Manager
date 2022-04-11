@@ -8,7 +8,7 @@ import UserHeader from "./components/UserHeader";
 import NewTask from "./components/NewTask";
 import Tasks from "./components/Tasks";
 import AuthContext from "./context/auth-context";
-// import { CircularProgress } from "@mui/material";
+import { Link, Typography } from "@mui/material";
 //---------------------------------------
 
 function App() {
@@ -47,26 +47,36 @@ function App() {
 		<main className="app">
 			{!ctxData.isLoggedin && <AuthPage />}
 			{ctxData.isLoggedin && (
-				<MainContainer>
-					<Fragment>
-						<UserHeader />
-						<NewTask reloadHandler={reloadHandler} />
-						<Tasks
-							tasksData={tasksData}
-							reloadHandler={reloadHandler}
-						/>
-						{/* {isLoading && (
-							<CircularProgress
-								style={{
-									position: "absolute",
-									left: "47%",
-									top: "35%",
-								}}
-								color="primary"
+				<Fragment>
+					<MainContainer>
+						<Fragment>
+							<UserHeader />
+							<NewTask reloadHandler={reloadHandler} />
+							<Tasks
+								tasksData={tasksData}
+								reloadHandler={reloadHandler}
 							/>
-						)} */}
-					</Fragment>
-				</MainContainer>
+						</Fragment>
+					</MainContainer>
+					<Typography
+						style={{
+							display: "flex",
+							justifyContent: "center",
+							alignItems: "center",
+							marginTop: 20,
+							color: "gray",
+							fontSize: "small",
+						}}
+					>
+						Made by &nbsp;
+						<Link
+							href="https://github.com/hoomantalakian"
+							target="_blank"
+						>
+							Hooman Talakian
+						</Link>
+					</Typography>
+				</Fragment>
 			)}
 		</main>
 	);

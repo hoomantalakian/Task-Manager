@@ -1,12 +1,13 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext, useRef, useState } from "react";
 import Axios from "axios";
 //
 import AuthContext from "../context/auth-context";
-import { Box, Button, Link, TextField, Typography } from "@mui/material";
+import { Alert, Box, Button, Link, TextField, Typography } from "@mui/material";
 //-----------------------------------------------------------
 function LoginPage(props) {
 	const username = useRef("");
 	const password = useRef("");
+	const [alert, setAlert] = useState(null);
 
 	const ctxData = useContext(AuthContext);
 
@@ -20,14 +21,33 @@ function LoginPage(props) {
 				const userId = res.data.userId;
 				const username = res.data.username;
 				ctxData.onLogin(token, userId, username);
+				setAlert(null);
 			})
 			.catch((err) => {
 				console.error("Somethinhg went wrong (loginHandler)", err);
-				console.log(err);
+				setAlert(err.response.data);
 			});
 	}
 	return (
 		<Box sx={props.boxStyle} maxWidth="xs">
+			<Typography style={props.titleStyle} variant="h4" align="center">
+				TASK MANAGER!
+			</Typography>
+			{alert && (
+				<Alert
+					style={{
+						minWidth: 270,
+						maxWidth: 380,
+						padding: "3px 12px",
+						borderRadius: 10,
+						marginBottom: 20,
+						boxSizing: "border-box",
+					}}
+					severity="error"
+				>
+					{alert}
+				</Alert>
+			)}
 			<TextField
 				inputRef={username}
 				id="username"
@@ -38,6 +58,9 @@ function LoginPage(props) {
 				required
 			/>
 			<TextField
+				// error
+				// helperText="Please fill out the password"
+				type="password"
 				inputRef={password}
 				id="password"
 				label="Password"
@@ -45,6 +68,7 @@ function LoginPage(props) {
 				fullWidth
 				required
 			/>
+
 			<Button
 				onClick={loginHandler}
 				variant="outlined"

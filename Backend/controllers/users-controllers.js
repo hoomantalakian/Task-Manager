@@ -7,7 +7,6 @@ const User = require("../models/user-model");
 const router = express.Router();
 //
 async function signUp(req, res) {
-	console.log("sent to back");
 	const { username, password } = req.body;
 	let creatingUser;
 	try {
@@ -18,7 +17,8 @@ async function signUp(req, res) {
 
 	if (creatingUser) {
 		res.status(409).send(
-			`This Username "${creatingUser.username}" exist, Login or choose another Username!`
+			`The username "${creatingUser.username}" already exists! please login or choose another
+			username.`
 		);
 		return;
 	}
@@ -63,17 +63,20 @@ async function signUp(req, res) {
 //
 async function login(req, res) {
 	const { username, password } = req.body;
+
 	let existingUser;
 	try {
 		existingUser = await User.findOne({ username: username });
 	} catch (err) {
 		res.send("Something went wrong (existingUser): ", err);
 	}
-
-	let isPasswordValid = await bcrypt.compare(password, existingUser.password);
+	let isPasswordValid;
+	if (existingUser) {
+		isPasswordValid = await bcrypt.compare(password, existingUser.password);
+	}
 
 	if (!existingUser || !isPasswordValid) {
-		res.status(401).send("Username or Password is wrong! try again");
+		res.status(401).send("Username or Password is wrong! try again.");
 		return;
 	}
 

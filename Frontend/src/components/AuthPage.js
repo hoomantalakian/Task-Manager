@@ -16,6 +16,13 @@ const boxStyle = {
 	textAlign: "center",
 	borderRadius: 2,
 };
+const titleStyle = {
+	color: "burlywood",
+	margin: "-10px 0 15px",
+	fontWeight: "bold"
+};
+
+//
 
 function AuthPage() {
 	const [isLoginMode, setIsLoginMode] = useState(true);
@@ -36,12 +43,14 @@ function AuthPage() {
 				<LoginPage
 					signpModeHandler={signpModeHandler}
 					boxStyle={boxStyle}
+					titleStyle={titleStyle}
 				/>
 			)}
 			{isSignpMode && (
 				<SignupPage
 					loginModeHandler={loginModeHandler}
 					boxStyle={boxStyle}
+					titleStyle={titleStyle}
 				/>
 			)}
 		</Fragment>
