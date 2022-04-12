@@ -27,7 +27,6 @@ async function readOneTask(req, res) {
 }
 //
 async function createTask(req, res) {
-	console.log("createTask");
 	const { title, description, creator } = req.body;
 	const createdTask = new Task({
 		title,

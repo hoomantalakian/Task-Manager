@@ -1,0 +1,8 @@
+{
+	"env": {
+		"db_user": "hoomtal",
+		"db_password": "mongol",
+		"db_name": "task-manager",
+		"JWT_private_key": "seCreT-KeY-12"
+	}
+}

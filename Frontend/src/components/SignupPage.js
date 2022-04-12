@@ -10,9 +10,39 @@ function SignupPage(props) {
 	const password = useRef("");
 	const [alert, setAlert] = useState(null);
 
+	const [isUsernameEmpty, setIsUsernameEmpty] = useState(false);
+	const [isPasswordEmpty, setIsPasswordEmpty] = useState(false);
+	const [userEmptyMessage, setUserEmptyMessage] = useState();
+	const [passEmptyMessage, setPassEmptyMessage] = useState();
+
 	const ctxData = useContext(AuthContext);
 
 	function signupHandler() {
+		if (!username.current.value && password.current.value) {
+			setUserEmptyMessage("Please fill out Username");
+			setPassEmptyMessage();
+			setIsUsernameEmpty(true);
+			setIsPasswordEmpty(false);
+			return;
+		} else if (!password.current.value && username.current.value) {
+			setPassEmptyMessage("Please fill out Password");
+			setUserEmptyMessage();
+			setIsPasswordEmpty(true);
+			setIsUsernameEmpty(false);
+			return;
+		} else if (!password.current.value && !username.current.value) {
+			setUserEmptyMessage("Please fill out Username");
+			setPassEmptyMessage("Please fill out Password");
+			setIsPasswordEmpty(true);
+			setIsUsernameEmpty(true);
+			return;
+		} else {
+			setIsPasswordEmpty(false);
+			setIsUsernameEmpty(false);
+			setUserEmptyMessage();
+			setPassEmptyMessage();
+		}
+		//
 		Axios.post("http://localhost:5000/api/users/signup", {
 			username: username.current.value,
 			password: password.current.value,
@@ -26,7 +56,6 @@ function SignupPage(props) {
 			})
 			.catch((err) => {
 				console.error("Somethinhg went wrong (signupHandler):", err);
-				console.log(err.response.data);
 				setAlert(err.response.data);
 			});
 	}
@@ -51,6 +80,8 @@ function SignupPage(props) {
 				</Alert>
 			)}
 			<TextField
+				error={!!isUsernameEmpty}
+				helperText={userEmptyMessage}
 				inputRef={username}
 				id="username"
 				label="Username"
@@ -60,6 +91,8 @@ function SignupPage(props) {
 				required
 			/>
 			<TextField
+				error={!!isPasswordEmpty}
+				helperText={passEmptyMessage}
 				type="password"
 				inputRef={password}
 				id="password"

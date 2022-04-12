@@ -18,11 +18,9 @@ const boxStyle = {
 };
 const titleStyle = {
 	color: "burlywood",
-	margin: "-10px 0 15px",
-	fontWeight: "bold"
+	margin: "-10px 0 17px",
+	fontWeight: "bold",
 };
-
-//
 
 function AuthPage() {
 	const [isLoginMode, setIsLoginMode] = useState(true);

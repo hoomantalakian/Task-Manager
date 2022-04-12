@@ -48,7 +48,7 @@ async function signUp(req, res) {
 	try {
 		token = jwt.sign(
 			{ userId: createdUser.id, username: createdUser.username },
-			"seCreT-KeY-12"
+			"process.env.JWT_private_key"
 		);
 	} catch (err) {
 		res.send("Something went wrong (signUp token): ", err);
@@ -84,7 +84,7 @@ async function login(req, res) {
 	try {
 		token = jwt.sign(
 			{ userId: existingUser.id, username: existingUser.username },
-			"seCreT-KeY-12"
+			"process.env.JWT_private_key"
 		);
 	} catch (err) {
 		res.send("Something went wrong (login token): ", err);

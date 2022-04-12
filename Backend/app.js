@@ -1,14 +1,15 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const corsErrorHandler = require("./utility/corsErrorHandler");
 const cors = require("cors");
+// const dotenv = require("dotenv");
+
 //
+// dotenv.config();
 const usersRoutes = require("./routes/users-routes");
 const tasksRoutes = require("./routes/tasks-routes");
 //-------------------------------------------
 const app = express();
 app.use(express.json());
-// app.use(corsErrorHandler);
 app.use(cors());
 
 // Routes
@@ -16,9 +17,9 @@ app.use("/api/users", usersRoutes);
 app.use("/api/tasks", tasksRoutes);
 
 // database connection
-mongoose
+mongoose 
 	.connect(
-		"mongodb+srv://hoomtal:mongol@mycluster.acedq.mongodb.net/task-manager?retryWrites=true&w=majority"
+		`mongodb+srv://${process.env.db_user}:${process.env.db_password}@mycluster.acedq.mongodb.net/${process.env.db_name}?retryWrites=true&w=majority`
 	)
 	.then(() => {
 		console.log("Database is Connected");
@@ -26,7 +27,8 @@ mongoose
 	.catch((err) => {
 		console.log("Database connection Failed:", err);
 	});
-// port connection
-app.listen(5000, () => {
+// port connection   
+const port = process.env.PORT || 5000;
+app.listen(port, () => {
 	console.log("Listening on port 5000");
 });

@@ -9,9 +9,39 @@ function LoginPage(props) {
 	const password = useRef("");
 	const [alert, setAlert] = useState(null);
 
+	const [isUsernameEmpty, setIsUsernameEmpty] = useState(false);
+	const [isPasswordEmpty, setIsPasswordEmpty] = useState(false);
+	const [userEmptyMessage, setUserEmptyMessage] = useState();
+	const [passEmptyMessage, setPassEmptyMessage] = useState();
+
 	const ctxData = useContext(AuthContext);
 
 	function loginHandler() {
+		if (!username.current.value && password.current.value) {
+			setUserEmptyMessage("Please fill out Username");
+			setPassEmptyMessage();
+			setIsUsernameEmpty(true);
+			setIsPasswordEmpty(false);
+			return;
+		} else if (!password.current.value && username.current.value) {
+			setPassEmptyMessage("Please fill out Password");
+			setUserEmptyMessage();
+			setIsPasswordEmpty(true);
+			setIsUsernameEmpty(false);
+			return;
+		} else if (!password.current.value && !username.current.value) {
+			setUserEmptyMessage("Please fill out Username");
+			setPassEmptyMessage("Please fill out Password");
+			setIsPasswordEmpty(true);
+			setIsUsernameEmpty(true);
+			return;
+		} else {
+			setIsPasswordEmpty(false);
+			setIsUsernameEmpty(false);
+			setUserEmptyMessage();
+			setPassEmptyMessage();
+		}
+		//
 		Axios.post("http://localhost:5000/api/users/login", {
 			username: username.current.value,
 			password: password.current.value,
@@ -49,6 +79,8 @@ function LoginPage(props) {
 				</Alert>
 			)}
 			<TextField
+				error={!!isUsernameEmpty}
+				helperText={userEmptyMessage}
 				inputRef={username}
 				id="username"
 				label="Username"
@@ -58,8 +90,8 @@ function LoginPage(props) {
 				required
 			/>
 			<TextField
-				// error
-				// helperText="Please fill out the password"
+				error={!!isPasswordEmpty}
+				helperText={passEmptyMessage}
 				type="password"
 				inputRef={password}
 				id="password"
