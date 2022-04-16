@@ -16,6 +16,8 @@ function LoginPage(props) {
 
 	const ctxData = useContext(AuthContext);
 
+	
+
 	function loginHandler() {
 		if (!username.current.value && password.current.value) {
 			setUserEmptyMessage("Please fill out Username");
