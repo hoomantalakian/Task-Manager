@@ -1,14 +1,27 @@
 import "./app.css";
 import axios from "axios";
-import { useEffect, useState, useContext, Fragment } from "react";
+import React, {
+	Suspense,
+	useEffect,
+	useState,
+	useContext,
+	Fragment,
+} from "react";
 //
-import AuthPage from "./components/AuthPage";
-import MainContainer from "./components/MainContainer";
-import UserHeader from "./components/UserHeader";
-import NewTask from "./components/NewTask";
-import Tasks from "./components/Tasks";
+import { CircularProgress, Link, Typography } from "@mui/material";
+
 import AuthContext from "./context/auth-context";
-import { Link, Typography } from "@mui/material";
+import MainContainer from "./components/MainContainer";
+// import AuthPage from "./components/AuthPage";
+// import UserHeader from "./components/UserHeader";
+// import NewTask from "./components/NewTask";
+// import Tasks from "./components/Tasks";
+//
+const AuthPage = React.lazy(() => import("./components/AuthPage"));
+const UserHeader = React.lazy(() => import("./components/UserHeader"));
+const NewTask = React.lazy(() => import("./components/NewTask"));
+const Tasks = React.lazy(() => import("./components/Tasks"));
+
 //---------------------------------------
 
 function App() {
@@ -32,9 +45,10 @@ function App() {
 		}
 	}, [ctxData]);
 
+	/// get task
 	useEffect(() => {
 		axios
-			.get(`http://localhost:5000/api/tasks/${ctxData.userId}`)
+			.get(`${process.env.REACT_APP_API_URL}/tasks/${ctxData.userId}`)
 			.then((res) => {
 				setTasksData(res.data);
 			})
@@ -45,39 +59,55 @@ function App() {
 
 	return (
 		<main className="app">
-			{!ctxData.isLoggedin && <AuthPage />}
-			{ctxData.isLoggedin && (
-				<Fragment>
-					<MainContainer>
-						<Fragment>
-							<UserHeader />
-							<NewTask reloadHandler={reloadHandler} />
-							<Tasks
-								tasksData={tasksData}
-								reloadHandler={reloadHandler}
-							/>
-						</Fragment>
-					</MainContainer>
-					<Typography
-						style={{
-							display: "flex",
-							justifyContent: "center",
-							alignItems: "center",
-							marginTop: 20,
-							color: "gray",
-							fontSize: "small",
-						}}
-					>
-						Made by &nbsp;
-						<Link
-							href="https://github.com/hoomantalakian"
-							target="_blank"
+			<Suspense
+				fallback={
+					<CircularProgress
+						style={{ display: "block", margin: "50% auto" }}
+						color="success"
+					/>
+				}
+			>
+				{!ctxData.isLoggedin && <AuthPage />}
+				{ctxData.isLoggedin && (
+					<Fragment>
+						<MainContainer>
+							<Fragment>
+								<UserHeader />
+								<NewTask reloadHandler={reloadHandler} />
+								<Tasks
+									tasksData={tasksData}
+									reloadHandler={reloadHandler}
+								/>
+							</Fragment>
+						</MainContainer>
+						<div
+							style={{
+								display: "flex",
+								justifyContent: "center",
+							}}
 						>
-							Hooman Talakian
-						</Link>
-					</Typography>
-				</Fragment>
-			)}
+							<Typography
+								style={{
+									backgroundColor: "rgba(0, 0, 0, 0.4)",
+									marginTop: 20,
+									color: "gray",
+									fontSize: "small",
+									padding: "3px 7px",
+									borderRadius: "5px",
+								}}
+							>
+								Made by &nbsp;
+								<Link
+									href="https://github.com/hoomantalakian"
+									target="_blank"
+								>
+									Hooman Talakian
+								</Link>
+							</Typography>
+						</div>
+					</Fragment>
+				)}
+			</Suspense>
 		</main>
 	);
 }

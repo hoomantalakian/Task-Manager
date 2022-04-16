@@ -33,7 +33,7 @@ async function signUp(req, res) {
 	const createdUser = new User({
 		username,
 		password: hashedPassword,
-		// insert some dummy data (in task) for user demo
+		// Later insert some dummy data (in task) for user demo
 		tasks: [],
 	});
 

@@ -1,6 +1,6 @@
 import { Fragment, useContext, useRef, useState } from "react";
 import axios from "axios";
-// MUI
+//
 import { Button, Modal, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import AddBoxIcon from "@mui/icons-material/AddBox";
@@ -37,7 +37,7 @@ function NewTask(props) {
 
 	async function addTaskHandler() {
 		await axios
-			.post("http://localhost:5000/api/tasks", {
+			.post(process.env.REACT_APP_API_URL + "/tasks", {
 				title: title.current.value,
 				description: description.current.value,
 				creator: ctxData.userId,

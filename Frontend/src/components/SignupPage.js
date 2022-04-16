@@ -43,7 +43,7 @@ function SignupPage(props) {
 			setPassEmptyMessage();
 		}
 		//
-		Axios.post("http://localhost:5000/api/users/signup", {
+		Axios.post(process.env.REACT_APP_API_URL + "/users/signup", {
 			username: username.current.value,
 			password: password.current.value,
 		})

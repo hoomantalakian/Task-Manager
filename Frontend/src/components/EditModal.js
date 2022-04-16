@@ -41,7 +41,7 @@ function EditModal(props) {
 	function updateTaskHandler() {
 		props.closeModalHandler();
 		axios
-			.patch(`http://localhost:5000/api/tasks/${props.id}`, {
+			.patch(`${process.env.REACT_APP_API_URL}/tasks/${props.id}`, {
 				title,
 				description,
 			})

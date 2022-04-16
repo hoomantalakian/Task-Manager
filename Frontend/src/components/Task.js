@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 //
 import { Box, Typography, ButtonGroup, Button } from "@mui/material";
@@ -9,32 +9,21 @@ import EditModal from "./EditModal.js";
 
 function Task(props) {
 	const [isModalOpen, setModalIsOpen] = useState(false);
-	const [title, setTitle] = useState();
-	const [description, setDescription] = useState();
-	//
+
 	function openModalHandler() {
 		setModalIsOpen(true);
 	}
 	function closeModalHandler() {
 		setModalIsOpen(false);
 	}
-	// get task
-	useEffect(() => {
-		axios
-			.get(`http://localhost:5000/api/tasks/${props.id}`)
-			.then((res) => {
-				setTitle(res.data.title);
-				setDescription(res.data.description);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	}, [props.id]);
+
+	// (get task in app.js)
 	// (update task in EditModal.js)
+
 	// delete task
 	function deleteTaskHandler() {
 		axios
-			.delete(`http://localhost:5000/api/tasks/${props.id}`)
+			.delete(`${process.env.REACT_APP_API_URL}/tasks/${props.id}`)
 			.then((res) => {
 				props.reloadHandler();
 			})
