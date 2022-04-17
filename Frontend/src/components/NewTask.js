@@ -21,9 +21,9 @@ const boxStyle = {
 };
 
 function NewTask(props) {
-	
 	const [isOpen, setIsOpen] = useState(false);
 	const ctxData = useContext(AuthContext);
+	const [inputEmptyMessage, setInputEmptyMessage] = useState();
 
 	function openHandler() {
 		setIsOpen(true);
@@ -36,6 +36,12 @@ function NewTask(props) {
 	const description = useRef();
 
 	async function addTaskHandler() {
+		if (!title.current.value || !description.current.value) {
+			setInputEmptyMessage("Please fill out all fields");
+			return;
+		} else {
+			setInputEmptyMessage(null);
+		}
 		await axios
 			.post(process.env.REACT_APP_API_URL + "/tasks", {
 				title: title.current.value,
@@ -43,7 +49,7 @@ function NewTask(props) {
 				creator: ctxData.userId,
 			})
 			.then((res) => {
-				console.log(res.data.creator);
+				console.log(res.data);
 			});
 		setIsOpen(false);
 		props.reloadHandler();
@@ -74,11 +80,13 @@ function NewTask(props) {
 					/>
 					<TextField
 						inputRef={description}
+						helperText={inputEmptyMessage}
 						id="description"
 						label="Description"
 						placeholder="Describe your task (optional)"
 						multiline={true}
 						fullWidth
+						required
 					/>
 					<Button
 						onClick={addTaskHandler}

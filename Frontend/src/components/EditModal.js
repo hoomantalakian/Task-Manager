@@ -22,6 +22,8 @@ const boxStyle = {
 function EditModal(props) {
 	const [title, setTitle] = useState();
 	const [description, setDescription] = useState();
+	const [inputEmptyMessage, setInputEmptyMessage] = useState();
+
 	//
 	const titleRef = useRef();
 	const descriptionRef = useRef();
@@ -39,6 +41,12 @@ function EditModal(props) {
 	}
 	// update task
 	function updateTaskHandler() {
+		if (!title || !description) {
+			setInputEmptyMessage("Please fill out all fields");
+			return;
+		} else {
+			setInputEmptyMessage(null);
+		}
 		props.closeModalHandler();
 		axios
 			.patch(`${process.env.REACT_APP_API_URL}/tasks/${props.id}`, {
@@ -70,12 +78,14 @@ function EditModal(props) {
 				<TextField
 					inputRef={descriptionRef}
 					value={description}
+					helperText={inputEmptyMessage}
 					onChange={descriptionChangeHandler}
 					id="description"
 					label="Description"
 					placeholder="Describe your task (optional)"
 					multiline={true}
 					fullWidth
+					required
 				/>
 				<Button
 					onClick={updateTaskHandler}
