@@ -1,7 +1,7 @@
 import { Fragment, useContext, useRef, useState } from "react";
 import axios from "axios";
 //
-import { Button, Modal, TextField } from "@mui/material";
+import { Button, CircularProgress, Modal, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import DoneIcon from "@mui/icons-material/Done";
@@ -15,15 +15,16 @@ const boxStyle = {
 	minWidth: 270,
 	maxWidth: 380,
 	bgcolor: "#f1f6fe",
-	padding: 4,
+	padding: 3,
 	textAlign: "center",
 	borderRadius: 2,
 };
 
 function NewTask(props) {
-	const [isOpen, setIsOpen] = useState(false);
 	const ctxData = useContext(AuthContext);
+	const [isOpen, setIsOpen] = useState(false);
 	const [inputEmptyMessage, setInputEmptyMessage] = useState();
+	const [isLoading, setIsLoading] = useState(false);
 
 	function openHandler() {
 		setIsOpen(true);
@@ -42,6 +43,7 @@ function NewTask(props) {
 		} else {
 			setInputEmptyMessage(null);
 		}
+		setIsLoading(true);
 		await axios
 			.post(process.env.REACT_APP_API_URL + "/tasks", {
 				title: title.current.value,
@@ -52,6 +54,7 @@ function NewTask(props) {
 				console.log(res.data);
 			});
 		setIsOpen(false);
+		setIsLoading(false);
 		props.reloadHandler();
 	}
 
@@ -88,16 +91,20 @@ function NewTask(props) {
 						fullWidth
 						required
 					/>
-					<Button
-						onClick={addTaskHandler}
-						variant="outlined"
-						color="warning"
-						sx={{ mt: 2, fontSize: "medium" }}
-						fullWidth
-						startIcon={<DoneIcon />}
-					>
-						Add this task
-					</Button>
+					{isLoading ? (
+						<CircularProgress style={{ margin: "20px 0 -10px" }} />
+					) : (
+						<Button
+							onClick={addTaskHandler}
+							variant="outlined"
+							color="warning"
+							sx={{ mt: 2, fontSize: "medium" }}
+							fullWidth
+							startIcon={<DoneIcon />}
+						>
+							Add this task
+						</Button>
+					)}
 				</Box>
 			</Modal>
 		</Fragment>

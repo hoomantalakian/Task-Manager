@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 //
-import { Button, Modal, TextField } from "@mui/material";
+import { Button, CircularProgress, Modal, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import DoneIcon from "@mui/icons-material/Done";
 //------------------------------------------------------
@@ -14,7 +14,7 @@ const boxStyle = {
 	minWidth: 270,
 	maxWidth: 380,
 	bgcolor: "#f1f6fe",
-	padding: 4,
+	padding: 3,
 	textAlign: "center",
 	borderRadius: 2,
 };
@@ -23,6 +23,7 @@ function EditModal(props) {
 	const [title, setTitle] = useState();
 	const [description, setDescription] = useState();
 	const [inputEmptyMessage, setInputEmptyMessage] = useState();
+	const [isLoading, setIsLoading] = useState(false);
 
 	//
 	const titleRef = useRef();
@@ -40,15 +41,15 @@ function EditModal(props) {
 		setDescription(descriptionRef.current.value);
 	}
 	// update task
-	function updateTaskHandler() {
+	async function updateTaskHandler() {
 		if (!title || !description) {
 			setInputEmptyMessage("Please fill out all fields");
 			return;
 		} else {
 			setInputEmptyMessage(null);
 		}
-		props.closeModalHandler();
-		axios
+		setIsLoading(true);
+		await axios
 			.patch(`${process.env.REACT_APP_API_URL}/tasks/${props.id}`, {
 				title,
 				description,
@@ -59,6 +60,8 @@ function EditModal(props) {
 			.catch((err) => {
 				console.log(err);
 			});
+		setIsLoading(false);
+		props.closeModalHandler();
 	}
 
 	return (
@@ -87,16 +90,21 @@ function EditModal(props) {
 					fullWidth
 					required
 				/>
-				<Button
-					onClick={updateTaskHandler}
-					variant="outlined"
-					color="warning"
-					sx={{ mt: 2, fontSize: "medium" }}
-					fullWidth
-					startIcon={<DoneIcon />}
-				>
-					Update!
-				</Button>
+
+				{isLoading ? (
+					<CircularProgress style={{ margin: "20px 0 -10px" }} />
+				) : (
+					<Button
+						onClick={updateTaskHandler}
+						variant="outlined"
+						color="warning"
+						sx={{ mt: 2, fontSize: "medium" }}
+						fullWidth
+						startIcon={<DoneIcon />}
+					>
+						Update!
+					</Button>
+				)}
 			</Box>
 		</Modal>
 	);

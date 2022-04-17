@@ -1,14 +1,17 @@
 import React, { useRef, useContext, useState } from "react";
 import Axios from "axios";
-
 //
 import { Alert, Box, Button, Link, TextField, Typography } from "@mui/material";
 import AuthContext from "../context/auth-context";
+import LoadingButton from "@mui/lab/LoadingButton";
+import SaveIcon from "@mui/icons-material/Save";
+
 //-------------------------------------------------
 function SignupPage(props) {
 	const username = useRef("");
 	const password = useRef("");
 	const [alert, setAlert] = useState(null);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const [isUsernameEmpty, setIsUsernameEmpty] = useState(false);
 	const [isPasswordEmpty, setIsPasswordEmpty] = useState(false);
@@ -17,7 +20,7 @@ function SignupPage(props) {
 
 	const ctxData = useContext(AuthContext);
 
-	function signupHandler() {
+	async function signupHandler() {
 		if (!username.current.value && password.current.value) {
 			setUserEmptyMessage("Please fill out Username");
 			setPassEmptyMessage();
@@ -42,8 +45,9 @@ function SignupPage(props) {
 			setUserEmptyMessage();
 			setPassEmptyMessage();
 		}
+		setIsLoading(true);
 		//
-		Axios.post(process.env.REACT_APP_API_URL + "/users/signup", {
+		await Axios.post(process.env.REACT_APP_API_URL + "/users/signup", {
 			username: username.current.value,
 			password: password.current.value,
 		})
@@ -58,6 +62,7 @@ function SignupPage(props) {
 				console.error("Somethinhg went wrong (signupHandler):", err);
 				setAlert(err.response.data);
 			});
+		setIsLoading(false);
 	}
 
 	return (
@@ -101,15 +106,28 @@ function SignupPage(props) {
 				fullWidth
 				required
 			/>
-			<Button
-				onClick={signupHandler}
-				variant="outlined"
-				color="warning"
-				sx={{ mt: 2, fontSize: "medium" }}
-				fullWidth
-			>
-				Sign up
-			</Button>
+			{!isLoading ? (
+				<Button
+					onClick={signupHandler}
+					variant="outlined"
+					color="warning"
+					sx={{ mt: 2, fontSize: "medium" }}
+					fullWidth
+				>
+					Sign up
+				</Button>
+			) : (
+				<LoadingButton
+					sx={{ mt: 2, fontSize: "medium" }}
+					loading
+					loadingPosition="start"
+					startIcon={<SaveIcon />}
+					variant="outlined"
+					fullWidth
+				>
+					Signing up
+				</LoadingButton>
+			)}
 			<Typography mt>
 				{" "}
 				Have an account already?{" "}

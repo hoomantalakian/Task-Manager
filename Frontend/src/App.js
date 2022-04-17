@@ -62,7 +62,7 @@ function App() {
 			<Suspense
 				fallback={
 					<CircularProgress
-						style={{ display: "block", margin: "50% auto" }}
+						style={{ display: "block", margin: "40% auto" }}
 						color="success"
 					/>
 				}

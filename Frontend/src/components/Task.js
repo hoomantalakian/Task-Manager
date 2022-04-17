@@ -2,13 +2,16 @@ import { useState } from "react";
 import axios from "axios";
 //
 import { Box, Typography, ButtonGroup, Button } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import SaveIcon from "@mui/icons-material/Save";
 import EditModal from "./EditModal.js";
 // -----------------------------------------------
 
 function Task(props) {
 	const [isModalOpen, setModalIsOpen] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 
 	function openModalHandler() {
 		setModalIsOpen(true);
@@ -21,8 +24,9 @@ function Task(props) {
 	// (update task in EditModal.js)
 
 	// delete task
-	function deleteTaskHandler() {
-		axios
+	async function deleteTaskHandler() {
+		setIsLoading(true);
+		await axios
 			.delete(`${process.env.REACT_APP_API_URL}/tasks/${props.id}`)
 			.then((res) => {
 				props.reloadHandler();
@@ -30,6 +34,7 @@ function Task(props) {
 			.catch((err) => {
 				console.log(err);
 			});
+		setIsLoading(false);
 	}
 	return (
 		<Box
@@ -56,12 +61,31 @@ function Task(props) {
 					>
 						Edit
 					</Button>
-					<Button
-						startIcon={<DeleteIcon />}
-						onClick={deleteTaskHandler}
-					>
-						Delete
-					</Button>
+					{!isLoading ? (
+						<Button
+							loading
+							loadingPosition="start"
+							startIcon={<DeleteIcon />}
+							onClick={deleteTaskHandler}
+						>
+							Delete
+						</Button>
+					) : (
+						<LoadingButton
+							style={{
+								marginLeft: "10px",
+								marginRight: "-10px",
+								paddingRight: "10px",
+								boxSizing: "border-box",
+							}}
+							loading
+							loadingPosition="start"
+							startIcon={<SaveIcon />}
+							// variant="outlined"
+						>
+							Deleting
+						</LoadingButton>
+					)}
 				</ButtonGroup>
 				<EditModal
 					reloadHandler={props.reloadHandler}

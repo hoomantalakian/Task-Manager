@@ -3,11 +3,15 @@ import Axios from "axios";
 //
 import AuthContext from "../context/auth-context";
 import { Alert, Box, Button, Link, TextField, Typography } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
+import SaveIcon from "@mui/icons-material/Save";
+
 //-----------------------------------------------------------
 function LoginPage(props) {
 	const username = useRef("");
 	const password = useRef("");
 	const [alert, setAlert] = useState(null);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const [isUsernameEmpty, setIsUsernameEmpty] = useState(false);
 	const [isPasswordEmpty, setIsPasswordEmpty] = useState(false);
@@ -16,9 +20,7 @@ function LoginPage(props) {
 
 	const ctxData = useContext(AuthContext);
 
-	
-
-	function loginHandler() {
+	async function loginHandler() {
 		if (!username.current.value && password.current.value) {
 			setUserEmptyMessage("Please fill out Username");
 			setPassEmptyMessage();
@@ -44,8 +46,8 @@ function LoginPage(props) {
 			setPassEmptyMessage();
 		}
 		//
-
-		Axios.post(process.env.REACT_APP_API_URL + "/users/login", {
+		setIsLoading(true);
+		await Axios.post(process.env.REACT_APP_API_URL + "/users/login", {
 			username: username.current.value,
 			password: password.current.value,
 		})
@@ -60,6 +62,7 @@ function LoginPage(props) {
 				console.error("Somethinhg went wrong (loginHandler)", err);
 				setAlert(err.response.data);
 			});
+		setIsLoading(false);
 	}
 	return (
 		<Box sx={props.boxStyle} maxWidth="xs">
@@ -104,15 +107,28 @@ function LoginPage(props) {
 				required
 			/>
 
-			<Button
-				onClick={loginHandler}
-				variant="outlined"
-				color="warning"
-				sx={{ mt: 2, fontSize: "medium" }}
-				fullWidth
-			>
-				LogIn
-			</Button>
+			{!isLoading ? (
+				<Button
+					onClick={loginHandler}
+					variant="outlined"
+					color="warning"
+					sx={{ mt: 2, fontSize: "medium" }}
+					fullWidth
+				>
+					LogIn
+				</Button>
+			) : (
+				<LoadingButton
+					sx={{ mt: 2, fontSize: "medium" }}
+					loading
+					loadingPosition="start"
+					startIcon={<SaveIcon />}
+					variant="outlined"
+					fullWidth
+				>
+					Logging in
+				</LoadingButton>
+			)}
 			<Typography mt>
 				Create new account{" "}
 				<Link onClick={props.signpModeHandler} href="#">
