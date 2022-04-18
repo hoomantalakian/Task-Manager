@@ -12,6 +12,7 @@ import { CircularProgress, Link, Typography } from "@mui/material";
 
 import AuthContext from "./context/auth-context";
 import MainContainer from "./components/MainContainer";
+import { Box } from "@mui/system";
 // import AuthPage from "./components/AuthPage";
 // import UserHeader from "./components/UserHeader";
 // import NewTask from "./components/NewTask";
@@ -27,10 +28,11 @@ const Tasks = React.lazy(() => import("./components/Tasks"));
 function App() {
 	const [tasksData, setTasksData] = useState([]);
 	const [reloadToggle, setReloadToggle] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const ctxData = useContext(AuthContext);
 
-	function reloadHandler() {
+	async function reloadHandler() {
 		setReloadToggle((prev) => !prev);
 	}
 
@@ -47,10 +49,12 @@ function App() {
 
 	/// get task
 	useEffect(() => {
+		setIsLoading(true);
 		axios
 			.get(`${process.env.REACT_APP_API_URL}/tasks/${ctxData.userId}`)
 			.then((res) => {
 				setTasksData(res.data);
+				setIsLoading(false);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -74,10 +78,24 @@ function App() {
 							<Fragment>
 								<UserHeader />
 								<NewTask reloadHandler={reloadHandler} />
-								<Tasks
-									tasksData={tasksData}
-									reloadHandler={reloadHandler}
-								/>
+								{isLoading ? (
+									<Box
+										sx={{
+											display: "flex",
+											justifyContent: "center",
+											alignItems: "center",
+										}}
+									>
+										<CircularProgress
+											style={{ margin: "30px 0 25px" }}
+										/>
+									</Box>
+								) : (
+									<Tasks
+										tasksData={tasksData}
+										reloadHandler={reloadHandler}
+									/>
+								)}
 							</Fragment>
 						</MainContainer>
 						<div
