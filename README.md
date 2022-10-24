@@ -2,6 +2,7 @@
 **Stack**:
 - JavaScript
 - Node.js / Express
+- React
 - Material UI (MUI)
 - Axios
 - JWT
